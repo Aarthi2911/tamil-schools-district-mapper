@@ -1,3 +1,4 @@
+
 import { MapPin } from "lucide-react";
 import { District } from "../data/schoolsData";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
@@ -9,66 +10,64 @@ interface TamilNaduMapProps {
 }
 
 const TamilNaduMap = ({ selectedDistrict, onDistrictSelect, filteredDistricts }: TamilNaduMapProps) => {
-  // Simplified district coordinates for Tamil Nadu
-  const districtPositions = [
-    { id: 1, name: "Chennai", x: 65, y: 45, schools: 2500 },
-    { id: 2, name: "Coimbatore", x: 25, y: 40, schools: 1800 },
-    { id: 3, name: "Madurai", x: 40, y: 65, schools: 1600 },
-    { id: 4, name: "Tiruchirappalli", x: 45, y: 50, schools: 1400 },
-    { id: 5, name: "Salem", x: 35, y: 35, schools: 1300 },
-    { id: 6, name: "Tirunelveli", x: 35, y: 85, schools: 1200 },
-    { id: 7, name: "Erode", x: 30, y: 35, schools: 1100 },
-    { id: 8, name: "Vellore", x: 50, y: 25, schools: 1000 },
-    { id: 9, name: "Thoothukudi", x: 40, y: 80, schools: 950 },
-    { id: 10, name: "Dindigul", x: 38, y: 55, schools: 900 },
-    { id: 11, name: "Thanjavur", x: 50, y: 55, schools: 850 },
-    { id: 12, name: "Cuddalore", x: 60, y: 40, schools: 800 },
-    { id: 13, name: "Kanchipuram", x: 58, y: 45, schools: 750 },
-    { id: 14, name: "Villupuram", x: 58, y: 38, schools: 700 },
-    { id: 15, name: "Sivaganga", x: 45, y: 68, schools: 650 },
-    { id: 16, name: "Virudhunagar", x: 42, y: 75, schools: 600 },
-    { id: 17, name: "Tiruvannamalai", x: 55, y: 32, schools: 550 },
-    { id: 18, name: "Dharmapuri", x: 45, y: 28, schools: 500 },
-    { id: 19, name: "Nagapattinam", x: 52, y: 58, schools: 480 },
-    { id: 20, name: "Namakkal", x: 38, y: 38, schools: 450 },
-    { id: 21, name: "Krishnagiri", x: 42, y: 25, schools: 420 },
-    { id: 22, name: "Ramanathapuram", x: 48, y: 75, schools: 400 },
-    { id: 23, name: "Tiruppur", x: 28, y: 38, schools: 380 },
-    { id: 24, name: "Karur", x: 40, y: 45, schools: 350 },
-    { id: 25, name: "Pudukkottai", x: 48, y: 62, schools: 320 },
-    { id: 26, name: "Theni", x: 35, y: 62, schools: 300 },
-    { id: 27, name: "Kanyakumari", x: 32, y: 95, schools: 280 },
-    { id: 28, name: "Tiruvallur", x: 62, y: 40, schools: 260 },
-    { id: 29, name: "Tiruvarur", x: 52, y: 60, schools: 240 },
-    { id: 30, name: "Ariyalur", x: 48, y: 48, schools: 220 },
-    { id: 31, name: "Perambalur", x: 46, y: 45, schools: 200 },
-    { id: 32, name: "The Nilgiris", x: 25, y: 30, schools: 180 },
-    { id: 33, name: "Kallakurichi", x: 56, y: 35, schools: 160 },
-    { id: 34, name: "Ranipet", x: 52, y: 28, schools: 140 },
-    { id: 35, name: "Tirupathur", x: 48, y: 30, schools: 120 },
-    { id: 36, name: "Tenkasi", x: 38, y: 82, schools: 100 },
-    { id: 37, name: "Chengalpattu", x: 60, y: 47, schools: 80 },
-    { id: 38, name: "Mayiladuthurai", x: 52, y: 56, schools: 60 }
+  // District boundaries as SVG paths (simplified representation)
+  const districtBoundaries = [
+    { id: 1, name: "Chennai", path: "M320,180 L340,175 L350,190 L345,210 L325,215 L315,200 Z", schools: 2500 },
+    { id: 2, name: "Coimbatore", path: "M120,200 L160,190 L170,220 L150,240 L110,235 L100,210 Z", schools: 1800 },
+    { id: 3, name: "Madurai", path: "M200,320 L240,310 L250,340 L230,360 L190,355 L180,330 Z", schools: 1600 },
+    { id: 4, name: "Tiruchirappalli", path: "M220,250 L260,240 L270,270 L250,290 L210,285 L200,260 Z", schools: 1400 },
+    { id: 5, name: "Salem", path: "M170,170 L210,160 L220,190 L200,210 L160,205 L150,180 Z", schools: 1300 },
+    { id: 6, name: "Tirunelveli", path: "M170,420 L210,410 L220,440 L200,460 L160,455 L150,430 Z", schools: 1200 },
+    { id: 7, name: "Erode", path: "M140,170 L180,160 L190,190 L170,210 L130,205 L120,180 Z", schools: 1100 },
+    { id: 8, name: "Vellore", path: "M240,120 L280,110 L290,140 L270,160 L230,155 L220,130 Z", schools: 1000 },
+    { id: 9, name: "Thoothukudi", path: "M190,390 L230,380 L240,410 L220,430 L180,425 L170,400 Z", schools: 950 },
+    { id: 10, name: "Dindigul", path: "M180,270 L220,260 L230,290 L210,310 L170,305 L160,280 Z", schools: 900 },
+    { id: 11, name: "Thanjavur", path: "M240,270 L280,260 L290,290 L270,310 L230,305 L220,280 Z", schools: 850 },
+    { id: 12, name: "Cuddalore", path: "M290,190 L330,180 L340,210 L320,230 L280,225 L270,200 Z", schools: 800 },
+    { id: 13, name: "Kanchipuram", path: "M280,220 L320,210 L330,240 L310,260 L270,255 L260,230 Z", schools: 750 },
+    { id: 14, name: "Villupuram", path: "M280,180 L320,170 L330,200 L310,220 L270,215 L260,190 Z", schools: 700 },
+    { id: 15, name: "Sivaganga", path: "M210,330 L250,320 L260,350 L240,370 L200,365 L190,340 Z", schools: 650 },
+    { id: 16, name: "Virudhunagar", path: "M200,370 L240,360 L250,390 L230,410 L190,405 L180,380 Z", schools: 600 },
+    { id: 17, name: "Tiruvannamalai", path: "M260,150 L300,140 L310,170 L290,190 L250,185 L240,160 Z", schools: 550 },
+    { id: 18, name: "Dharmapuri", path: "M210,130 L250,120 L260,150 L240,170 L200,165 L190,140 Z", schools: 500 },
+    { id: 19, name: "Nagapattinam", path: "M250,280 L290,270 L300,300 L280,320 L240,315 L230,290 Z", schools: 480 },
+    { id: 20, name: "Namakkal", path: "M180,180 L220,170 L230,200 L210,220 L170,215 L160,190 Z", schools: 450 },
+    { id: 21, name: "Krishnagiri", path: "M200,120 L240,110 L250,140 L230,160 L190,155 L180,130 Z", schools: 420 },
+    { id: 22, name: "Ramanathapuram", path: "M230,370 L270,360 L280,390 L260,410 L220,405 L210,380 Z", schools: 400 },
+    { id: 23, name: "Tiruppur", path: "M130,180 L170,170 L180,200 L160,220 L120,215 L110,190 Z", schools: 380 },
+    { id: 24, name: "Karur", path: "M190,220 L230,210 L240,240 L220,260 L180,255 L170,230 Z", schools: 350 },
+    { id: 25, name: "Pudukkottai", path: "M230,300 L270,290 L280,320 L260,340 L220,335 L210,310 Z", schools: 320 },
+    { id: 26, name: "Theni", path: "M170,300 L210,290 L220,320 L200,340 L160,335 L150,310 Z", schools: 300 },
+    { id: 27, name: "Kanyakumari", path: "M150,470 L190,460 L200,490 L180,510 L140,505 L130,480 Z", schools: 280 },
+    { id: 28, name: "Tiruvallur", path: "M300,190 L340,180 L350,210 L330,230 L290,225 L280,200 Z", schools: 260 },
+    { id: 29, name: "Tiruvarur", path: "M250,290 L290,280 L300,310 L280,330 L240,325 L230,300 Z", schools: 240 },
+    { id: 30, name: "Ariyalur", path: "M230,230 L270,220 L280,250 L260,270 L220,265 L210,240 Z", schools: 220 },
+    { id: 31, name: "Perambalur", path: "M220,220 L260,210 L270,240 L250,260 L210,255 L200,230 Z", schools: 200 },
+    { id: 32, name: "The Nilgiris", path: "M110,140 L150,130 L160,160 L140,180 L100,175 L90,150 Z", schools: 180 },
+    { id: 33, name: "Kallakurichi", path: "M270,170 L310,160 L320,190 L300,210 L260,205 L250,180 Z", schools: 160 },
+    { id: 34, name: "Ranipet", path: "M250,130 L290,120 L300,150 L280,170 L240,165 L230,140 Z", schools: 140 },
+    { id: 35, name: "Tirupathur", path: "M230,140 L270,130 L280,160 L260,180 L220,175 L210,150 Z", schools: 120 },
+    { id: 36, name: "Tenkasi", path: "M180,400 L220,390 L230,420 L210,440 L170,435 L160,410 Z", schools: 100 },
+    { id: 37, name: "Chengalpattu", path: "M290,230 L330,220 L340,250 L320,270 L280,265 L270,240 Z", schools: 80 },
+    { id: 38, name: "Mayiladuthurai", path: "M250,270 L290,260 L300,290 L280,310 L240,305 L230,280 Z", schools: 60 }
   ];
 
-  const getDistrictData = (positionName: string) => {
-    return filteredDistricts.find(d => d.name === positionName);
+  const getDistrictData = (boundaryName: string) => {
+    return filteredDistricts.find(d => d.name === boundaryName);
   };
 
-  const getMarkerColor = (schools: number) => {
-    if (schools >= 1500) return "bg-red-500";
-    if (schools >= 1000) return "bg-orange-500";
-    if (schools >= 500) return "bg-yellow-500";
-    if (schools >= 200) return "bg-blue-500";
-    return "bg-green-500";
+  const getFillColor = (schools: number, isSelected: boolean, isFiltered: boolean) => {
+    if (!isFiltered && filteredDistricts.length < 38) return "#f3f4f6";
+    if (isSelected) return "#3b82f6";
+    if (schools >= 1500) return "#dc2626";
+    if (schools >= 1000) return "#ea580c";
+    if (schools >= 500) return "#eab308";
+    if (schools >= 200) return "#2563eb";
+    return "#16a34a";
   };
 
-  const getMarkerSize = (schools: number) => {
-    if (schools >= 1500) return "w-4 h-4";
-    if (schools >= 1000) return "w-3.5 h-3.5";
-    if (schools >= 500) return "w-3 h-3";
-    if (schools >= 200) return "w-2.5 h-2.5";
-    return "w-2 h-2";
+  const getStrokeColor = (isSelected: boolean) => {
+    return isSelected ? "#1e40af" : "#6b7280";
   };
 
   return (
@@ -78,58 +77,46 @@ const TamilNaduMap = ({ selectedDistrict, onDistrictSelect, filteredDistricts }:
         
         {/* Map Container */}
         <div className="relative bg-gradient-to-br from-blue-100 to-green-100 rounded-lg p-8 overflow-hidden">
-          {/* Stylized Tamil Nadu outline */}
+          {/* SVG Map with District Boundaries */}
           <div className="relative w-full h-96 bg-gradient-to-br from-emerald-50 to-blue-50 rounded-lg border-2 border-blue-200 shadow-inner">
-            
-            {/* District markers */}
-            {districtPositions.map((position) => {
-              const districtData = getDistrictData(position.name);
-              const isSelected = selectedDistrict?.name === position.name;
-              const isFiltered = filteredDistricts.some(d => d.name === position.name);
-              
-              if (!isFiltered && filteredDistricts.length < 38) return null;
-
-              return (
-                <Tooltip key={position.id}>
-                  <TooltipTrigger asChild>
-                    <div
-                      className="absolute transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
-                      style={{
-                        left: `${position.x}%`,
-                        top: `${position.y}%`,
-                      }}
-                      onClick={() => districtData && onDistrictSelect(districtData)}
-                    >
-                      {/* Marker */}
-                      <div className={`
-                        ${getMarkerColor(position.schools)} 
-                        ${getMarkerSize(position.schools)}
-                        rounded-full shadow-lg border-2 border-white
-                        ${isSelected ? 'ring-4 ring-blue-400 ring-opacity-60' : ''}
-                        hover:scale-125 transition-all duration-300
-                        relative z-10
-                      `} />
-                      
-                      {/* Pulse animation for selected district */}
-                      {isSelected && (
-                        <div className="absolute inset-0 rounded-full bg-blue-400 animate-ping opacity-30" />
-                      )}
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <div className="text-center">
-                      <div className="font-semibold text-gray-800">{position.name}</div>
-                      <div className="text-sm text-blue-600">{position.schools} schools</div>
-                      {districtData && (
-                        <div className="text-xs text-gray-600 mt-1">
-                          {districtData.totalStudents?.toLocaleString()} students
-                        </div>
-                      )}
-                    </div>
-                  </TooltipContent>
-                </Tooltip>
-              );
-            })}
+            <svg
+              viewBox="0 0 500 600"
+              className="w-full h-full"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              {/* District boundaries */}
+              {districtBoundaries.map((boundary) => {
+                const districtData = getDistrictData(boundary.name);
+                const isSelected = selectedDistrict?.name === boundary.name;
+                const isFiltered = filteredDistricts.some(d => d.name === boundary.name);
+                
+                return (
+                  <Tooltip key={boundary.id}>
+                    <TooltipTrigger asChild>
+                      <path
+                        d={boundary.path}
+                        fill={getFillColor(boundary.schools, isSelected, isFiltered)}
+                        stroke={getStrokeColor(isSelected)}
+                        strokeWidth={isSelected ? "2" : "1"}
+                        className="cursor-pointer transition-all duration-300 hover:opacity-80"
+                        onClick={() => districtData && onDistrictSelect(districtData)}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <div className="text-center">
+                        <div className="font-semibold text-gray-800">{boundary.name}</div>
+                        <div className="text-sm text-blue-600">{boundary.schools} schools</div>
+                        {districtData && (
+                          <div className="text-xs text-gray-600 mt-1">
+                            {districtData.totalStudents?.toLocaleString()} students
+                          </div>
+                        )}
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                );
+              })}
+            </svg>
 
             {/* Decorative elements */}
             <div className="absolute top-4 left-4 text-blue-600/20">
@@ -153,7 +140,34 @@ const TamilNaduMap = ({ selectedDistrict, onDistrictSelect, filteredDistricts }:
           {/* Map title overlay */}
           <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg">
             <div className="text-sm font-semibold text-gray-800">Interactive District Map</div>
-            <div className="text-xs text-gray-600">Click markers to explore schools</div>
+            <div className="text-xs text-gray-600">Click districts to explore schools</div>
+          </div>
+        </div>
+
+        {/* Legend */}
+        <div className="mt-4 bg-white rounded-lg p-4 shadow-sm">
+          <h3 className="text-sm font-semibold text-gray-800 mb-2">School Count Legend</h3>
+          <div className="flex flex-wrap gap-4 text-xs">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-red-600 rounded"></div>
+              <span>1500+ schools</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-orange-600 rounded"></div>
+              <span>1000-1499 schools</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-yellow-500 rounded"></div>
+              <span>500-999 schools</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-blue-600 rounded"></div>
+              <span>200-499 schools</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-green-600 rounded"></div>
+              <span>Under 200 schools</span>
+            </div>
           </div>
         </div>
       </div>
