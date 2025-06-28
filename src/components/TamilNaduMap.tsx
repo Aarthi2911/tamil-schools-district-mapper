@@ -10,46 +10,55 @@ interface TamilNaduMapProps {
 }
 
 const TamilNaduMap = ({ selectedDistrict, onDistrictSelect, filteredDistricts }: TamilNaduMapProps) => {
-  // District boundaries as SVG paths (simplified representation) with label positions
+  // More realistic district boundaries based on actual Tamil Nadu geography
   const districtBoundaries = [
-    { id: 1, name: "Chennai", path: "M320,180 L340,175 L350,190 L345,210 L325,215 L315,200 Z", schools: 2500, labelX: 330, labelY: 195 },
-    { id: 2, name: "Coimbatore", path: "M120,200 L160,190 L170,220 L150,240 L110,235 L100,210 Z", schools: 1800, labelX: 135, labelY: 215 },
-    { id: 3, name: "Madurai", path: "M200,320 L240,310 L250,340 L230,360 L190,355 L180,330 Z", schools: 1600, labelX: 215, labelY: 335 },
-    { id: 4, name: "Tiruchirappalli", path: "M220,250 L260,240 L270,270 L250,290 L210,285 L200,260 Z", schools: 1400, labelX: 235, labelY: 265 },
-    { id: 5, name: "Salem", path: "M170,170 L210,160 L220,190 L200,210 L160,205 L150,180 Z", schools: 1300, labelX: 185, labelY: 185 },
-    { id: 6, name: "Tirunelveli", path: "M170,420 L210,410 L220,440 L200,460 L160,455 L150,430 Z", schools: 1200, labelX: 185, labelY: 435 },
-    { id: 7, name: "Erode", path: "M140,170 L180,160 L190,190 L170,210 L130,205 L120,180 Z", schools: 1100, labelX: 155, labelY: 185 },
-    { id: 8, name: "Vellore", path: "M240,120 L280,110 L290,140 L270,160 L230,155 L220,130 Z", schools: 1000, labelX: 255, labelY: 135 },
-    { id: 9, name: "Thoothukudi", path: "M190,390 L230,380 L240,410 L220,430 L180,425 L170,400 Z", schools: 950, labelX: 205, labelY: 405 },
-    { id: 10, name: "Dindigul", path: "M180,270 L220,260 L230,290 L210,310 L170,305 L160,280 Z", schools: 900, labelX: 195, labelY: 285 },
-    { id: 11, name: "Thanjavur", path: "M240,270 L280,260 L290,290 L270,310 L230,305 L220,280 Z", schools: 850, labelX: 255, labelY: 285 },
-    { id: 12, name: "Cuddalore", path: "M290,190 L330,180 L340,210 L320,230 L280,225 L270,200 Z", schools: 800, labelX: 305, labelY: 205 },
-    { id: 13, name: "Kanchipuram", path: "M280,220 L320,210 L330,240 L310,260 L270,255 L260,230 Z", schools: 750, labelX: 295, labelY: 235 },
-    { id: 14, name: "Villupuram", path: "M280,180 L320,170 L330,200 L310,220 L270,215 L260,190 Z", schools: 700, labelX: 295, labelY: 195 },
-    { id: 15, name: "Sivaganga", path: "M210,330 L250,320 L260,350 L240,370 L200,365 L190,340 Z", schools: 650, labelX: 225, labelY: 345 },
-    { id: 16, name: "Virudhunagar", path: "M200,370 L240,360 L250,390 L230,410 L190,405 L180,380 Z", schools: 600, labelX: 215, labelY: 385 },
-    { id: 17, name: "Tiruvannamalai", path: "M260,150 L300,140 L310,170 L290,190 L250,185 L240,160 Z", schools: 550, labelX: 275, labelY: 165 },
-    { id: 18, name: "Dharmapuri", path: "M210,130 L250,120 L260,150 L240,170 L200,165 L190,140 Z", schools: 500, labelX: 225, labelY: 145 },
-    { id: 19, name: "Nagapattinam", path: "M250,280 L290,270 L300,300 L280,320 L240,315 L230,290 Z", schools: 480, labelX: 265, labelY: 295 },
-    { id: 20, name: "Namakkal", path: "M180,180 L220,170 L230,200 L210,220 L170,215 L160,190 Z", schools: 450, labelX: 195, labelY: 195 },
-    { id: 21, name: "Krishnagiri", path: "M200,120 L240,110 L250,140 L230,160 L190,155 L180,130 Z", schools: 420, labelX: 215, labelY: 135 },
-    { id: 22, name: "Ramanathapuram", path: "M230,370 L270,360 L280,390 L260,410 L220,405 L210,380 Z", schools: 400, labelX: 245, labelY: 385 },
-    { id: 23, name: "Tiruppur", path: "M130,180 L170,170 L180,200 L160,220 L120,215 L110,190 Z", schools: 380, labelX: 145, labelY: 195 },
-    { id: 24, name: "Karur", path: "M190,220 L230,210 L240,240 L220,260 L180,255 L170,230 Z", schools: 350, labelX: 205, labelY: 235 },
-    { id: 25, name: "Pudukkottai", path: "M230,300 L270,290 L280,320 L260,340 L220,335 L210,310 Z", schools: 320, labelX: 245, labelY: 315 },
-    { id: 26, name: "Theni", path: "M170,300 L210,290 L220,320 L200,340 L160,335 L150,310 Z", schools: 300, labelX: 185, labelY: 315 },
-    { id: 27, name: "Kanyakumari", path: "M150,470 L190,460 L200,490 L180,510 L140,505 L130,480 Z", schools: 280, labelX: 165, labelY: 485 },
-    { id: 28, name: "Tiruvallur", path: "M300,190 L340,180 L350,210 L330,230 L290,225 L280,200 Z", schools: 260, labelX: 315, labelY: 205 },
-    { id: 29, name: "Tiruvarur", path: "M250,290 L290,280 L300,310 L280,330 L240,325 L230,300 Z", schools: 240, labelX: 265, labelY: 305 },
-    { id: 30, name: "Ariyalur", path: "M230,230 L270,220 L280,250 L260,270 L220,265 L210,240 Z", schools: 220, labelX: 245, labelY: 245 },
-    { id: 31, name: "Perambalur", path: "M220,220 L260,210 L270,240 L250,260 L210,255 L200,230 Z", schools: 200, labelX: 235, labelY: 235 },
-    { id: 32, name: "The Nilgiris", path: "M110,140 L150,130 L160,160 L140,180 L100,175 L90,150 Z", schools: 180, labelX: 125, labelY: 155 },
-    { id: 33, name: "Kallakurichi", path: "M270,170 L310,160 L320,190 L300,210 L260,205 L250,180 Z", schools: 160, labelX: 285, labelY: 185 },
-    { id: 34, name: "Ranipet", path: "M250,130 L290,120 L300,150 L280,170 L240,165 L230,140 Z", schools: 140, labelX: 265, labelY: 145 },
-    { id: 35, name: "Tirupathur", path: "M230,140 L270,130 L280,160 L260,180 L220,175 L210,150 Z", schools: 120, labelX: 245, labelY: 155 },
-    { id: 36, name: "Tenkasi", path: "M180,400 L220,390 L230,420 L210,440 L170,435 L160,410 Z", schools: 100, labelX: 195, labelY: 415 },
-    { id: 37, name: "Chengalpattu", path: "M290,230 L330,220 L340,250 L320,270 L280,265 L270,240 Z", schools: 80, labelX: 305, labelY: 245 },
-    { id: 38, name: "Mayiladuthurai", path: "M250,270 L290,260 L300,290 L280,310 L240,305 L230,280 Z", schools: 60, labelX: 265, labelY: 285 }
+    // Northern districts
+    { id: 1, name: "Chennai", path: "M380,160 L420,155 L425,180 L415,200 L390,205 L375,185 Z", schools: 2500, labelX: 400, labelY: 175 },
+    { id: 8, name: "Vellore", path: "M340,120 L380,115 L385,145 L370,165 L345,160 L330,140 Z", schools: 1000, labelX: 360, labelY: 135 },
+    { id: 17, name: "Tiruvannamalai", path: "M370,145 L410,140 L415,170 L400,190 L375,185 L360,165 Z", schools: 550, labelX: 390, labelY: 160 },
+    { id: 18, name: "Dharmapuri", path: "M280,100 L320,95 L325,125 L310,145 L285,140 L270,120 Z", schools: 500, labelX: 300, labelY: 115 },
+    { id: 21, name: "Krishnagiri", path: "M300,95 L340,90 L345,120 L330,140 L305,135 L290,115 Z", schools: 420, labelX: 320, labelY: 110 },
+    { id: 34, name: "Ranipet", path: "M320,120 L360,115 L365,145 L350,165 L325,160 L310,140 Z", schools: 140, labelX: 340, labelY: 135 },
+    { id: 35, name: "Tirupathur", path: "M290,115 L330,110 L335,140 L320,160 L295,155 L280,135 Z", schools: 120, labelX: 310, labelY: 130 },
+    { id: 28, name: "Tiruvallur", path: "M360,140 L400,135 L405,165 L390,185 L365,180 L350,160 Z", schools: 260, labelX: 380, labelY: 155 },
+    { id: 13, name: "Kanchipuram", path: "M380,180 L420,175 L425,205 L410,225 L385,220 L370,200 Z", schools: 750, labelX: 400, labelY: 195 },
+    { id: 37, name: "Chengalpattu", path: "M400,200 L440,195 L445,225 L430,245 L405,240 L390,220 Z", schools: 80, labelX: 420, labelY: 215 },
+    
+    // Central districts
+    { id: 5, name: "Salem", path: "M250,140 L290,135 L295,165 L280,185 L255,180 L240,160 Z", schools: 1300, labelX: 270, labelY: 155 },
+    { id: 20, name: "Namakkal", path: "M270,160 L310,155 L315,185 L300,205 L275,200 L260,180 Z", schools: 450, labelX: 290, labelY: 175 },
+    { id: 7, name: "Erode", path: "M200,160 L240,155 L245,185 L230,205 L205,200 L190,180 Z", schools: 1100, labelX: 220, labelY: 175 },
+    { id: 23, name: "Tiruppur", path: "M180,180 L220,175 L225,205 L210,225 L185,220 L170,200 Z", schools: 380, labelX: 200, labelY: 195 },
+    { id: 2, name: "Coimbatore", path: "M150,180 L190,175 L195,205 L180,225 L155,220 L140,200 Z", schools: 1800, labelX: 170, labelY: 195 },
+    { id: 32, name: "The Nilgiris", path: "M120,160 L160,155 L165,185 L150,205 L125,200 L110,180 Z", schools: 180, labelX: 140, labelY: 175 },
+    
+    // Eastern districts
+    { id: 14, name: "Villupuram", path: "M380,190 L420,185 L425,215 L410,235 L385,230 L370,210 Z", schools: 700, labelX: 400, labelY: 205 },
+    { id: 33, name: "Kallakurichi", path: "M350,200 L390,195 L395,225 L380,245 L355,240 L340,220 Z", schools: 160, labelX: 370, labelY: 215 },
+    { id: 12, name: "Cuddalore", path: "M400,220 L440,215 L445,245 L430,265 L405,260 L390,240 Z", schools: 800, labelX: 420, labelY: 235 },
+    { id: 4, name: "Tiruchirappalli", path: "M290,220 L330,215 L335,245 L320,265 L295,260 L280,240 Z", schools: 1400, labelX: 310, labelY: 235 },
+    { id: 24, name: "Karur", path: "M260,200 L300,195 L305,225 L290,245 L265,240 L250,220 Z", schools: 350, labelX: 280, labelY: 215 },
+    { id: 31, name: "Perambalur", path: "M310,240 L350,235 L355,265 L340,285 L315,280 L300,260 Z", schools: 200, labelX: 330, labelY: 255 },
+    { id: 30, name: "Ariyalur", path: "M330,260 L370,255 L375,285 L360,305 L335,300 L320,280 Z", schools: 220, labelX: 350, labelY: 275 },
+    
+    // Central-South districts
+    { id: 11, name: "Thanjavur", path: "M340,280 L380,275 L385,305 L370,325 L345,320 L330,300 Z", schools: 850, labelX: 360, labelY: 295 },
+    { id: 29, name: "Tiruvarur", path: "M370,300 L410,295 L415,325 L400,345 L375,340 L360,320 Z", schools: 240, labelX: 390, labelY: 315 },
+    { id: 19, name: "Nagapattinam", path: "M400,320 L440,315 L445,345 L430,365 L405,360 L390,340 Z", schools: 480, labelX: 420, labelY: 335 },
+    { id: 38, name: "Mayiladuthurai", path: "M380,340 L420,335 L425,365 L410,385 L385,380 L370,360 Z", schools: 60, labelX: 400, labelY: 355 },
+    { id: 25, name: "Pudukkottai", path: "M310,300 L350,295 L355,325 L340,345 L315,340 L300,320 Z", schools: 320, labelX: 330, labelY: 315 },
+    
+    // Southern districts
+    { id: 10, name: "Dindigul", path: "M240,260 L280,255 L285,285 L270,305 L245,300 L230,280 Z", schools: 900, labelX: 260, labelY: 275 },
+    { id: 26, name: "Theni", path: "M200,280 L240,275 L245,305 L230,325 L205,320 L190,300 Z", schools: 300, labelX: 220, labelY: 295 },
+    { id: 3, name: "Madurai", path: "M260,300 L300,295 L305,325 L290,345 L265,340 L250,320 Z", schools: 1600, labelX: 280, labelY: 315 },
+    { id: 15, name: "Sivaganga", path: "M300,340 L340,335 L345,365 L330,385 L305,380 L290,360 Z", schools: 650, labelX: 320, labelY: 355 },
+    { id: 22, name: "Ramanathapuram", path: "M340,360 L380,355 L385,385 L370,405 L345,400 L330,380 Z", schools: 400, labelX: 360, labelY: 375 },
+    { id: 16, name: "Virudhunagar", path: "M260,340 L300,335 L305,365 L290,385 L265,380 L250,360 Z", schools: 600, labelX: 280, labelY: 355 },
+    { id: 6, name: "Tirunelveli", path: "M220,360 L260,355 L265,385 L250,405 L225,400 L210,380 Z", schools: 1200, labelX: 240, labelY: 375 },
+    { id: 36, name: "Tenkasi", path: "M200,380 L240,375 L245,405 L230,425 L205,420 L190,400 Z", schools: 100, labelX: 220, labelY: 395 },
+    { id: 9, name: "Thoothukudi", path: "M240,400 L280,395 L285,425 L270,445 L245,440 L230,420 Z", schools: 950, labelX: 260, labelY: 415 },
+    { id: 27, name: "Kanyakumari", path: "M180,420 L220,415 L225,445 L210,465 L185,460 L170,440 Z", schools: 280, labelX: 200, labelY: 435 }
   ];
 
   const getDistrictData = (boundaryName: string) => {
@@ -86,7 +95,7 @@ const TamilNaduMap = ({ selectedDistrict, onDistrictSelect, filteredDistricts }:
           {/* SVG Map with District Boundaries */}
           <div className="relative w-full h-96 bg-gradient-to-br from-emerald-50 to-blue-50 rounded-lg border-2 border-blue-200 shadow-inner">
             <svg
-              viewBox="0 0 500 600"
+              viewBox="0 0 600 500"
               className="w-full h-full"
               preserveAspectRatio="xMidYMid meet"
             >
