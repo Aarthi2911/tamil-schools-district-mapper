@@ -4,6 +4,7 @@ import TamilNaduMap from "../components/TamilNaduMap";
 import SearchBar from "../components/SearchBar";
 import MapLegend from "../components/MapLegend";
 import DistrictCard from "../components/DistrictCard";
+import SchoolList from "../components/SchoolList";
 import { schoolsData, District } from "../data/schoolsData";
 
 const Index = () => {
@@ -74,6 +75,14 @@ const Index = () => {
               />
             </div>
           </div>
+        </div>
+
+        {/* School Names List Section */}
+        <div className="mt-12">
+          <SchoolList 
+            selectedDistrict={selectedDistrict}
+            allDistricts={schoolsData}
+          />
         </div>
 
         {/* Districts Grid */}
