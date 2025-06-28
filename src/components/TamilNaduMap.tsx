@@ -1,6 +1,6 @@
-
 import { MapPin } from "lucide-react";
 import { District } from "../data/schoolsData";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 interface TamilNaduMapProps {
   selectedDistrict: District | null;
@@ -72,90 +72,92 @@ const TamilNaduMap = ({ selectedDistrict, onDistrictSelect, filteredDistricts }:
   };
 
   return (
-    <div className="relative">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Tamil Nadu Districts Map</h2>
-      
-      {/* Map Container */}
-      <div className="relative bg-gradient-to-br from-blue-100 to-green-100 rounded-lg p-8 overflow-hidden">
-        {/* Stylized Tamil Nadu outline */}
-        <div className="relative w-full h-96 bg-gradient-to-br from-emerald-50 to-blue-50 rounded-lg border-2 border-blue-200 shadow-inner">
-          
-          {/* District markers */}
-          {districtPositions.map((position) => {
-            const districtData = getDistrictData(position.name);
-            const isSelected = selectedDistrict?.name === position.name;
-            const isFiltered = filteredDistricts.some(d => d.name === position.name);
+    <TooltipProvider>
+      <div className="relative">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Tamil Nadu Districts Map</h2>
+        
+        {/* Map Container */}
+        <div className="relative bg-gradient-to-br from-blue-100 to-green-100 rounded-lg p-8 overflow-hidden">
+          {/* Stylized Tamil Nadu outline */}
+          <div className="relative w-full h-96 bg-gradient-to-br from-emerald-50 to-blue-50 rounded-lg border-2 border-blue-200 shadow-inner">
             
-            if (!isFiltered && filteredDistricts.length < 38) return null;
+            {/* District markers */}
+            {districtPositions.map((position) => {
+              const districtData = getDistrictData(position.name);
+              const isSelected = selectedDistrict?.name === position.name;
+              const isFiltered = filteredDistricts.some(d => d.name === position.name);
+              
+              if (!isFiltered && filteredDistricts.length < 38) return null;
 
-            return (
-              <div
-                key={position.id}
-                className="absolute transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
-                style={{
-                  left: `${position.x}%`,
-                  top: `${position.y}%`,
-                }}
-                onClick={() => districtData && onDistrictSelect(districtData)}
-              >
-                {/* Marker */}
-                <div className={`
-                  ${getMarkerColor(position.schools)} 
-                  ${getMarkerSize(position.schools)}
-                  rounded-full shadow-lg border-2 border-white
-                  ${isSelected ? 'ring-4 ring-blue-400 ring-opacity-60' : ''}
-                  hover:scale-125 transition-all duration-300
-                  relative z-10
-                `} />
-                
-                {/* Pulse animation for selected district */}
-                {isSelected && (
-                  <div className="absolute inset-0 rounded-full bg-blue-400 animate-ping opacity-30" />
-                )}
-                
-                {/* District label */}
-                <div className={`
-                  absolute top-4 left-1/2 transform -translate-x-1/2
-                  bg-white px-2 py-1 rounded-md shadow-lg border
-                  text-xs font-medium whitespace-nowrap
-                  ${isSelected ? 'opacity-100 scale-100' : 'opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100'}
-                  transition-all duration-300 z-20
-                `}>
-                  <div className="text-gray-800">{position.name}</div>
-                  <div className="text-blue-600 text-xs">
-                    {position.schools} schools
-                  </div>
+              return (
+                <Tooltip key={position.id}>
+                  <TooltipTrigger asChild>
+                    <div
+                      className="absolute transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
+                      style={{
+                        left: `${position.x}%`,
+                        top: `${position.y}%`,
+                      }}
+                      onClick={() => districtData && onDistrictSelect(districtData)}
+                    >
+                      {/* Marker */}
+                      <div className={`
+                        ${getMarkerColor(position.schools)} 
+                        ${getMarkerSize(position.schools)}
+                        rounded-full shadow-lg border-2 border-white
+                        ${isSelected ? 'ring-4 ring-blue-400 ring-opacity-60' : ''}
+                        hover:scale-125 transition-all duration-300
+                        relative z-10
+                      `} />
+                      
+                      {/* Pulse animation for selected district */}
+                      {isSelected && (
+                        <div className="absolute inset-0 rounded-full bg-blue-400 animate-ping opacity-30" />
+                      )}
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <div className="text-center">
+                      <div className="font-semibold text-gray-800">{position.name}</div>
+                      <div className="text-sm text-blue-600">{position.schools} schools</div>
+                      {districtData && (
+                        <div className="text-xs text-gray-600 mt-1">
+                          {districtData.totalStudents?.toLocaleString()} students
+                        </div>
+                      )}
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+              );
+            })}
+
+            {/* Decorative elements */}
+            <div className="absolute top-4 left-4 text-blue-600/20">
+              <MapPin size={24} />
+            </div>
+            <div className="absolute bottom-4 right-4 text-green-600/20">
+              <MapPin size={20} />
+            </div>
+            
+            {/* Compass */}
+            <div className="absolute top-4 right-4 bg-white/80 rounded-full p-2 shadow-md">
+              <div className="w-8 h-8 relative">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-1 h-6 bg-gradient-to-t from-red-500 to-red-600 rounded-full"></div>
                 </div>
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 text-xs font-bold text-red-600">N</div>
               </div>
-            );
-          })}
-
-          {/* Decorative elements */}
-          <div className="absolute top-4 left-4 text-blue-600/20">
-            <MapPin size={24} />
-          </div>
-          <div className="absolute bottom-4 right-4 text-green-600/20">
-            <MapPin size={20} />
-          </div>
-          
-          {/* Compass */}
-          <div className="absolute top-4 right-4 bg-white/80 rounded-full p-2 shadow-md">
-            <div className="w-8 h-8 relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-1 h-6 bg-gradient-to-t from-red-500 to-red-600 rounded-full"></div>
-              </div>
-              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 text-xs font-bold text-red-600">N</div>
             </div>
           </div>
-        </div>
 
-        {/* Map title overlay */}
-        <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg">
-          <div className="text-sm font-semibold text-gray-800">Interactive District Map</div>
-          <div className="text-xs text-gray-600">Click markers to explore schools</div>
+          {/* Map title overlay */}
+          <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg">
+            <div className="text-sm font-semibold text-gray-800">Interactive District Map</div>
+            <div className="text-xs text-gray-600">Click markers to explore schools</div>
+          </div>
         </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 };
 
