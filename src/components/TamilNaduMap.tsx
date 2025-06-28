@@ -1,4 +1,3 @@
-
 import { MapPin } from "lucide-react";
 import { District } from "../data/schoolsData";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
@@ -61,6 +60,9 @@ const TamilNaduMap = ({ selectedDistrict, onDistrictSelect, filteredDistricts }:
     { id: 27, name: "Kanyakumari", path: "M180,420 L220,415 L225,445 L210,465 L185,460 L170,440 Z", schools: 280, labelX: 200, labelY: 435 }
   ];
 
+  // Tamil Nadu state border outline
+  const tamilNaduBorder = "M110,180 L120,160 L160,155 L165,185 L150,205 L125,200 L110,180 M280,100 L320,95 L340,90 L380,115 L420,155 L445,225 L430,245 L445,345 L430,365 L425,365 L410,385 L385,380 L370,360 L345,400 L330,380 L305,365 L290,385 L265,380 L250,360 L225,400 L210,380 L205,420 L190,400 L170,440 L185,460 L210,465 L225,445 L280,395 L285,425 L270,445 L245,440 L230,420 L240,400 L280,395 L370,405 L385,385 L380,355 L340,360 L330,380 L345,400 L370,405 L400,345 L415,325 L440,315 L445,345 L440,195 L425,180 L420,155 L380,115 L340,90 L300,95 L280,100 L270,120 L240,160 L190,180 L140,200 L110,180 Z";
+
   const getDistrictData = (boundaryName: string) => {
     return filteredDistricts.find(d => d.name === boundaryName);
   };
@@ -99,6 +101,17 @@ const TamilNaduMap = ({ selectedDistrict, onDistrictSelect, filteredDistricts }:
               className="w-full h-full"
               preserveAspectRatio="xMidYMid meet"
             >
+              {/* Tamil Nadu State Border */}
+              <path
+                d={tamilNaduBorder}
+                fill="none"
+                stroke="#1e40af"
+                strokeWidth="3"
+                strokeDasharray="none"
+                className="pointer-events-none"
+                style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}
+              />
+
               {/* District boundaries */}
               {districtBoundaries.map((boundary) => {
                 const districtData = getDistrictData(boundary.name);
